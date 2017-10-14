@@ -1,0 +1,79 @@
+
+function x = PALU(A,b)
+% PALU solves system of linear equations Ax=b using PA=LU factorization
+% 
+% input:   A - matrix, A(n,n)
+%          b - vector, b(n)
+% output:  x - vector, x(n)
+
+  [n, m] = size(A);
+  if n~=m 
+       error('square matrix required')
+  end
+
+% if no pivoting to be made, permutation matrix is identity matrix
+
+  P = eye(n,n);
+
+%---------- elimination step ------------
+
+  for j=1:n       % eliminate every column
+
+    % find largest element in the column 
+
+    [amax, imax] = max( abs( A(j:n, j) ) );
+    imax = imax + j-1;
+
+    % swap rows i=imax and i=j in A and in P
+
+    if imax ~= j
+       A([imax j], :) = A([j imax], :);
+       P([imax j], :) = P([j imax], :);
+    end
+
+
+    % eliminate every element below main diadonal
+   
+    for i=j+1:n
+
+      q = A(i,j) / A(j,j);
+
+      % update elements in i-th row
+
+      A(i,j:n) = A(i,j:n) - A(j,j:n)*q;
+
+      % store eliminating factor in A
+
+      A(i,j) = q;
+
+    end
+
+  end
+
+%---------- solving backwards ----------
+
+% permute RHS of the equation
+
+   Pb = P*b;
+
+% solving Lc = Pb
+
+  c = zeros(n,1);
+
+  for i=1:n
+
+     c(i) = Pb(i) - A(i,1:i-1)*c(1:i-1);
+
+  end
+
+% solving Ux = c
+
+  x = zeros(n,1);
+
+  for i=n:-1:1
+
+    x(i) = ( c(i) - A(i,i+1:n)*x(i+1:n) ) / A(i,i);
+
+  end
+
+end 

@@ -1,0 +1,28 @@
+function [] = homework7helper2( A,b,x0,iter )
+%gauss_elim_naive and gausseidel functions are the functions provided from the
+%professor
+%This function is used just to keep a cleaner m-file this prints out the
+%results in a clear fashion
+
+fprintf('Iterations: %d\n', iter);
+tic
+gauss_seidel = gaussseidel(A,b,x0,iter);
+fprintf('Gauss-Seidel Time:%fms\n',toc*1000);
+tic
+gauss_elim = gauss_elim_pivot(A,b);
+fprintf('Gaussian Time:%fms\n',toc*1000);
+x = A\b;
+r = b-A*xc;
+
+relativeForwardsErr = norm(x-gauss_seidel, inf)/norm(x);
+relativeBackwardsErr =  norm(r,inf)/norm(b,inf);
+fprintf('Gauss-Seidel Relative Forwards Error:\n%d\n',...
+    relativeForwardsErr);
+fprintf('Gauss-Seidel Relative Backwards Error:\n%d\n',...
+    relativeBackwardsErr(A,b,gauss_seidel));
+fprintf('Gaussian Relative Forwards Error:\n%d\n',...
+    relativeForwardsErr(A,b,gauss_elim));
+fprintf('Gaussian Relative Backwards Error:\n%d\n\n',...
+    relativeBackwardsErr(A,b,gauss_elim));
+end
+

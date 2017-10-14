@@ -1,0 +1,15 @@
+function x = PALU(A,b)
+[n,m]=size(A);
+if n~=m
+    error('S;quare matrix required');
+end
+P=eye(n,n);
+for j=1:n
+   [amax,imax]=max(abs(j:n,j)));
+   imax=imax+j-1;
+   if imax~=j
+       A([imax j], :) = A([j imax],.:);
+       P([imax j], :) = P([j imax],.:);
+   end
+   
+end
